@@ -1,6 +1,8 @@
 <mac-enter-task (outEnterTask)="addTask($event)"></mac-enter-task>
 
 <div class="tasks">
-<mac-task *ngFor="let task of tasks" [inTask]="task">
+<mac-task *ngFor="let task of tasks" 
+    [inTask]="task"
+    (outTaskChange)="updateTask($event)">
 </mac-task>
 </div>

@@ -7,6 +7,8 @@ import { TaskComponent } from './tasks/task/task.component';
 import { EnterTaskComponent } from './tasks/enter-task/enter-task.component';
 import { CheckboxComponent } from './ui/checkbox/checkbox.component';
 
+import { TaskService } from './tasks/task.service';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -18,7 +20,7 @@ import { CheckboxComponent } from './ui/checkbox/checkbox.component';
   imports: [
     BrowserModule
   ],
-  providers: [],
+  providers: [TaskService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

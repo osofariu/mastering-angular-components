@@ -1,5 +1,8 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
+import { Task } from '../../model';
+import { TaskService } from '../task.service';
+
 @Component({
   selector: 'mac-task-list',
   templateUrl: './task-list.component.html',
@@ -7,18 +10,25 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 })
 export class TaskListComponent implements OnInit {
 
-  tasks = [
-    {id: 1, title: 'Task 1', done: false},
-    {id: 2, title: 'Task 2', done: true}
-  ];
-  id = this.tasks.length + 1;
+  tasks: Task[];
+  private taskService: TaskService;
 
-  constructor() { }
+  constructor(private taskServiceArg: TaskService) {
+    this.taskService = taskServiceArg;
+  }
 
   addTask(title: string) {
-    this.tasks.push({ title, done: false, id: this.id } );
-    this.id += 1;
+    const task: Task = { title: title, done: false};
+    this.taskService.addTask(task);
+    this.tasks = this.taskService.getTasks();
   }
+
+  updateTask(task: Task) {
+    this.taskService.updateTask(task);
+    this.tasks = this.taskService.getTasks();
+  }
+
   ngOnInit() {
+    this.tasks = this.taskService.getTasks();
   }
 }
