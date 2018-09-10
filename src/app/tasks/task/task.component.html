@@ -1,0 +1,6 @@
+<div>
+    <mac-checkbox [inIsChecked]="inTask.done" 
+    (outChecked)="inTask.done = $event"></mac-checkbox>
+</div>
+
+<div>{{inTask.title}}</div>
