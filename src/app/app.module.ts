@@ -1,6 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import {HttpClientModule} from '@angular/common/http';
+import {HttpClientInMemoryWebApiModule} from 'angular-in-memory-web-api';
 
+import {Database} from './database';
 import { AppComponent } from './app.component';
 import { TaskListComponent } from './tasks/task-list/task-list.component';
 import { TaskComponent } from './tasks/task/task.component';
@@ -20,7 +23,11 @@ import { ToggleComponent } from './ui/toggle/toggle.component';
     ToggleComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    HttpClientModule,
+    HttpClientInMemoryWebApiModule.forRoot(Database, {
+      delay: 0
+    })
   ],
   providers: [TaskService],
   bootstrap: [AppComponent]
