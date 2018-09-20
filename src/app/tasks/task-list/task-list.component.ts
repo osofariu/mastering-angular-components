@@ -1,6 +1,8 @@
-import { Component, OnInit, ViewEncapsulation, Output } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Task, TaskListFilterType } from '../../model';
 import { TaskService } from '../task.service';
+import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { EventEmitter } from 'events';
 
 @Component({
@@ -9,47 +11,41 @@ import { EventEmitter } from 'events';
   encapsulation: ViewEncapsulation.None
 })
 export class TaskListComponent {
-  tasks: Task[];
-  filteredTasks: Task[];
+  private tasks: Observable<Task[]>;
+  filteredTasks: Observable<Task[]>;
   taskListFilterTypes: TaskListFilterType[] = ['all', 'open', 'done'];
-  activeTaskFilterType: TaskListFilterType = 'all';
+  activeTaskFilterType = new  BehaviorSubject<TaskListFilterType>('all');
 
-  private taskService: TaskService;
-
-  constructor(private aTaskService: TaskService) {
-    this.taskService = aTaskService;
+  constructor(private taskService: TaskService) {
     this.tasks = this.taskService.getTasks();
-    this.filterTasks();
+    this.filteredTasks = combineLatest(this.tasks, this.activeTaskFilterType)
+    .pipe(
+      map(([task, activeTaskFilterType]) => {
+        return task.filter((task: Task) => {
+          if (activeTaskFilterType === 'all') {
+            return true;
+          } else if (activeTaskFilterType === 'open') {
+            return !task.done;
+          } else {
+            return task.done;
+          }
+        });
+      })
+    )
   }
 
   addTask(title: string) {
     const task: Task = { title: title, done: false};
     this.taskService.addTask(task);
     this.tasks = this.taskService.getTasks();
-    this.filterTasks();
   }
 
   updateTask(task: Task) {
     this.taskService.updateTask(task);
     this.tasks = this.taskService.getTasks();
-    this.filterTasks();
   }
 
   activateFilterType(taskFilterType: TaskListFilterType) {
-    this.activeTaskFilterType = taskFilterType;
-    this.filterTasks();
-  }
-
-  filterTasks() {
-    this.filteredTasks = this.tasks
-      .filter((task: Task) => {
-        if (this.activeTaskFilterType === 'all') {
-          return true;
-        } else if (this.activeTaskFilterType === 'open') {
-          return !task.done;
-        } else {
-          return task.done;
-        }
-      });
+    this.activeTaskFilterType.next(taskFilterType);
   }
 }

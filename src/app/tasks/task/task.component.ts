@@ -8,7 +8,7 @@ import { TaskService } from '../task.service';
   encapsulation: ViewEncapsulation.None
 })
 export class TaskComponent  {
-  @Input() inTask: any;
+  @Input() inTask: Task;
   @Output() outTaskChange = new EventEmitter<Task>();
 
   private taskService: TaskService;
