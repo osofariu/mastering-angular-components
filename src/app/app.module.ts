@@ -12,6 +12,7 @@ import { CheckboxComponent } from './ui/checkbox/checkbox.component';
 
 import { TaskService } from './tasks/task.service';
 import { ToggleComponent } from './ui/toggle/toggle.component';
+import { TaskListContainerComponent } from './container/task-list-container/task-list-container.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { ToggleComponent } from './ui/toggle/toggle.component';
     TaskComponent,
     EnterTaskComponent,
     CheckboxComponent,
-    ToggleComponent
+    ToggleComponent,
+    TaskListContainerComponent
   ],
   imports: [
     BrowserModule,
